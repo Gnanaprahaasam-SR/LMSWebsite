@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import DocumentsList from './DocumentList';
 
 const Dashboard = () => {
   const folders = [
@@ -23,6 +24,8 @@ const Dashboard = () => {
   return (
     <Container fluid className="py-4">
       <h1 className="text-center mb-4">Dashboard</h1>
+
+      <DocumentsList/>
       <Row className="g-4">
         {folders.map((folder, index) => (
           <Col key={index} md={4}>

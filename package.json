@@ -11,11 +11,17 @@
   },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.17.0",
+    "@pnp/common": "^2.15.0",
+    "@pnp/logging": "^4.7.0",
+    "@pnp/nodejs": "^4.7.0",
+    "@pnp/odata": "^2.15.0",
+    "@pnp/sp": "^4.7.0",
     "bootstrap": "^5.3.3",
     "pptxgenjs": "^3.12.0",
     "pspdfkit": "^2024.8.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.6",
+    "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1"
   },
