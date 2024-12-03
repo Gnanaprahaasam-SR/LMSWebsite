@@ -1,65 +1,185 @@
-import React from 'react';
-import { Navbar, Nav, Container, Dropdown, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Navbar, Nav } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.svg';
+import { IoMoonOutline, IoPersonOutline } from 'react-icons/io5';
+// import { BiMoon } from 'react-icons/bi';
+import { AiOutlineNotification, AiOutlineSun } from 'react-icons/ai';
 
 const Header = () => {
+    const location = useLocation();
+    const [activeLink, setActiveLink] = useState(location.pathname);
+    const [navColor, setNavColor] = useState('white'); // Default color for Home page
+    const [theme, setTheme] = useState('light'); // Default theme
+    const [notificationCount, setNotificationCount] = useState(10000);
+
+    const [isOpenProfile, setIsOpenProfile] = useState(false);
+
+    const toggleDropdown = () => setIsOpenProfile(!isOpenProfile);
+
+    useEffect(() => {
+        // Update activeLink and navColor based on the current path
+        setActiveLink(location.pathname);
+
+        // Set text color based on the page
+        if (location.pathname === '/') {
+            setNavColor(theme === 'light' ? 'white' : 'white'); // Home page
+        } else {
+            setNavColor(theme === 'light' ? 'black' : 'white'); // Other pages
+        }
+    }, [location, theme]);
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme); // Persist theme
+    };
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }, []);
+
     return (
-        <Navbar bg="light" expand="lg" className="shadow-sm">
-            <Container fluid>
-                {/* Logo Section */}
-                <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-                    <Image
-                        src="https://via.placeholder.com/50" // Replace with your logo URL
-                        alt="LMS Logo"
-                        roundedCircle
-                        className="me-2"
-                        style={{ width: '40px', height: '40px' }}
-                    />
-                    <span className="fw-bold">LMS App</span>
-                </Navbar.Brand>
+        <Navbar
+            bg="transparent"
+            className="header"
+            expand="lg"
+            style={{ color: navColor }}
+        >
+            {/* Logo on the left */}
+            <Navbar.Brand as={Link} to="/" className="header-logo" style={{ color: navColor }}>
+                <img src={logo} alt="Pixel World" />
+                <b>EduVerse</b>
+            </Navbar.Brand>
 
-                {/* Toggle for Mobile */}
-                <Navbar.Toggle aria-controls="lms-navbar" />
+            {/* Toggler for mobile view */}
+            <Navbar.Toggle aria-controls="navbar-nav" />
 
-                {/* Navigation Links */}
-                <Navbar.Collapse id="lms-navbar">
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
-                        <Nav.Link as={Link} to="/courses">Courses</Nav.Link>
-                        <Nav.Link as={Link} to="/assignments">Assignments</Nav.Link>
-                        <Nav.Link as={Link} to="/grades">Grades</Nav.Link>
-                    </Nav>
+            <Navbar.Collapse id="navbar-nav">
+                {/* Center navigation links */}
+                <Nav className="mx-auto">
+                    {/* <Nav.Link
+                        className={`nav-link ${activeLink === '/' ? 'active' : ''}`}
+                        as={Link}
+                        to="/"
+                        style={{ color: navColor }}
+                    >
+                        Home
+                    </Nav.Link> */}
+                    <Nav.Link
+                        className={`nav-link ${activeLink === '/policies' ? 'active' : ''}`}
+                        as={Link}
+                        to="/policies"
+                        style={{ color: navColor }}
+                    >
+                        Policies
+                    </Nav.Link>
+                    <Nav.Link
+                        className={`nav-link ${activeLink === '/orientations' ? 'active' : ''}`}
+                        as={Link}
+                        to="/orientations"
+                        style={{ color: navColor }}
+                    >
+                        Orientations
+                    </Nav.Link>
+                    <Nav.Link
+                        className={`nav-link ${activeLink === '/training' ? 'active' : ''}`}
+                        as={Link}
+                        to="/training"
+                        style={{ color: navColor }}
+                    >
+                        Trainings
+                    </Nav.Link>
 
-                    {/* User Profile Dropdown */}
-                    <Dropdown align="end">
-                        <Dropdown.Toggle variant="outline-secondary" id="user-dropdown">
-                            <span className="d-flex align-items-center">
-                                <div
-                                    className="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                                    style={{
-                                        width: '35px',
-                                        height: '35px',
-                                        fontSize: '14px',
-                                        fontWeight: 'bold',
-                                    }}
+                    <Nav.Link
+                        className={`nav-link ${activeLink === '/apps' ? 'active' : ''}`}
+                        as={Link}
+                        to="/apps"
+                        style={{ color: navColor }}
+                    >
+                        Apps
+                    </Nav.Link>
+
+
+                </Nav>
+
+                {/* Button on the right */}
+                <div className="d-sm-flex align-items-center ">
+                    <input type='search' className='header-search my-2' placeholder='Search...' />
+                    {/* Theme toggle button */}
+                    <button
+                        className="btn btn-secondary ms-3  notification-button"
+                        style={{
+                            backgroundColor: theme === 'light' ? '#f0f0f0' : '#333',
+                            color: theme === 'light' ? '#000' : '#fff',
+                        }}
+                    >
+                        <AiOutlineNotification size={24} />
+                        <span className="notification-badge">
+                            {notificationCount > 999 ? '999+' : notificationCount}
+                        </span>
+                    </button>
+
+
+                    <button
+                        onClick={toggleTheme}
+                        className="btn btn-secondary ms-3"
+                        style={{ backgroundColor: theme === 'light' ? '#f0f0f0' : '#333', color: theme === 'light' ? '#000' : '#fff' }}
+                    >
+                        {theme === 'light' ? <IoMoonOutline size={24} /> : <AiOutlineSun size={26} />}
+                    </button>
+
+
+                    <div style={{ position: "relative", display: "inline-block" }}>
+                        {/* Button */}
+                        <button
+                            onClick={toggleDropdown}
+                            className="btn btn-secondary ms-3"
+                            style={{
+                                backgroundColor: theme === "light" ? "#f0f0f0" : "#333",
+                                color: theme === "light" ? "#000" : "#fff",
+                            }}
+                        >
+                            <IoPersonOutline size={24} />
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {isOpenProfile && (
+                            <div
+                                className="profile-dropdown-menu"
+
+                            >
+                                <Nav.Link
+                                    as={Link}
+                                    to='/profile'
+                                    className={`profile-dropdown-item ${activeLink === '/profile' ? 'active' : ''}`}
                                 >
-                                    JD {/* Replace with user initials */}
-                                </div>
-                                <span className="ms-2 d-none d-lg-inline">John Doe</span>
-                            </span>
-                        </Dropdown.Toggle>
+                                    My Profile
+                                </Nav.Link>
+                                <Nav.Link
+                                    as={Link}
+                                    to='/settings'
+                                    className={`profile-dropdown-item ${activeLink === '/settings' ? 'active' : ''}`}
 
-                        <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item as={Link} to="/logout" className="text-danger">
-                                Logout
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Navbar.Collapse>
-            </Container>
+                                >
+                                    Settings
+                                </Nav.Link>
+                                <Nav.Link
+                                    as={Link}
+                                    to='/logout'
+                                    className={`profile-dropdown-item ${activeLink === '/logout' ? 'active' : ''}`}
+
+                                >
+                                    Logout
+                                </Nav.Link>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </Navbar.Collapse>
         </Navbar>
     );
 };

@@ -9,7 +9,7 @@ const DocumentsList = () => {
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const docs = await getDocuments("Documents"); // "Documents" is your document library name
+        const docs = await getDocuments("Shared Documents"); // "Documents" is your document library name
         setDocuments(docs);
         setLoading(false);
       } catch (error) {
