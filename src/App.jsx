@@ -7,6 +7,10 @@ import TrainingPPTs from './pages/TrainingPPTs';
 import TrainingVideos from './pages/TrainingVideos';
 import ViewItem from './pages/ViewItem';
 import Header from './components/Header';
+import './App.css';
+import Policys from './pages/Policy';
+import Orientations from './pages/Orientations';
+import Training from './pages/Training';
 
 function App() {
   return (
@@ -14,6 +18,10 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/policies" element={<Policys />} />
+        <Route path="/orientations" element={<Orientations />} />
+        <Route path="/training" element={<Training />} />
+
         <Route path="/policy-pdfs" element={<PolicyPDFs />} />
         <Route path="/training-ppts" element={<TrainingPPTs />} />
         <Route path="/training-videos" element={<TrainingVideos />} />
